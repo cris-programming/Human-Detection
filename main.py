@@ -1,4 +1,4 @@
-from cv2 import CascadeClassifier, VideoCapture, cvtColor, COLOR_BGR2GRAY, imwrite, imshow, waitKey, destroyAllWindows
+from cv2 import CascadeClassifier, VideoCapture, cvtColor, COLOR_BGR2GRAY, imwrite, rectangle, imshow, waitKey, destroyAllWindows
 from datetime import datetime
 quit_key = 'q'
 
@@ -21,7 +21,23 @@ if not cap.isOpened():
 last_capture_time = datetime.now()
 log_interval = 10  # Log an entry and take picture every X seconds
 
-def save_image(timestamp):
+def save_image(timestamp, frame, humans, faces, lower_bodies, upper_bodies, profile):
+    # Draw rectangles around detected humans
+    for (x, y, w, h) in humans:
+        frame = rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)  # Draw a green rectangle for humans
+    # Draw rectangles around detected faces
+    for (x, y, w, h) in faces:
+        frame = rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)  # Draw a red rectangle for faces
+    # Draw rectangles around detected upper bodies
+    for (x, y, w, h) in upper_bodies:
+        frame = rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)  # Draw a blue rectangle for upper bodies
+    # Draw rectangles around detected lower bodies
+    for (x, y, w, h) in lower_bodies:
+        frame = rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 2)  # Draw a yellow rectangle for lower bodies
+    # Draw rectangles around detected profile faces
+    for (x, y, w, h) in profile:
+        frame = rectangle(frame, (x, y), (x + w, y + h), (255, 255, 0), 2)  # Draw an orange rectangle for profile faces
+    
     image_filename = f"human_{timestamp}.jpg"
     imwrite(image_filename, frame)
     # Check if is possible to save the img
@@ -58,10 +74,10 @@ while True:
 
     time_difference = int((datetime.now() - last_capture_time).total_seconds())
 
-    if (len(humans) > 0 or len(faces) > 0 or len(upper_bodies) > 0 or len(lower_bodies) > 0 or len(profile) > 0) and time_difference - log_interval >= 0:
+    if (len(humans) > 0 or len(faces) > 0 or len(upper_bodies) > 0 or  len(profile) > 0) and time_difference - log_interval >= 0:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         # A human is detected, capture the image
-        save_image(timestamp)
+        save_image(timestamp, frame, humans, faces, profile, upper_bodies, lower_bodies)
 
         # Log the detection time to a text file
         save_log(timestamp)
