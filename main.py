@@ -7,6 +7,7 @@ human_cascade = CascadeClassifier('haarcascade_fullbody.xml')
 face_cascade = CascadeClassifier('haarcascade_frontalface_default.xml')
 upperbody_cascade = CascadeClassifier('haarcascade_upperbody.xml')
 lowerbody_cascade = CascadeClassifier('haarcascade_lowerbody.xml')
+profile_cascade = CascadeClassifier('haarcascade_profileface.xml')
 
 # Initialize the camera
 camera = 0 # 0 for default camera, change to a different number if you have multiple cameras.
@@ -49,6 +50,7 @@ while True:
     
     # Detect faces
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+    profile = profile_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
     
     # Detect lower and upper bodies
     upper_bodies = upperbody_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
@@ -56,7 +58,7 @@ while True:
 
     time_difference = int((datetime.now() - last_capture_time).total_seconds())
 
-    if (len(humans) > 0 or len(faces) > 0 or len(upper_bodies) > 0 or len(lower_bodies) > 0) and time_difference - log_interval > 0:
+    if (len(humans) > 0 or len(faces) > 0 or len(upper_bodies) > 0 or len(lower_bodies) > 0 or len(profile) > 0) and time_difference - log_interval >= 0:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         # A human is detected, capture the image
         save_image(timestamp)
