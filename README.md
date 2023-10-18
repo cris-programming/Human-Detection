@@ -31,6 +31,7 @@ human_cascade = cv2.CascadeClassifier('haarcascade_fullbody.xml')
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 upperbody_cascade = cv2.CascadeClassifier('haarcascade_upperbody.xml')
 lowerbody_cascade = cv2.CascadeClassifier('haarcascade_lowerbody.xml')
+profile_cascade = CascadeClassifier('haarcascade_profileface.xml')
 ```
 
 3. Run the script:
