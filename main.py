@@ -62,7 +62,7 @@ while True:
         save_image(timestamp)
 
         # Log the detection time to a text file
-        save_log()
+        save_log(timestamp)
         
         last_capture_time = datetime.now()
 
